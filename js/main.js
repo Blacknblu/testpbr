@@ -19,7 +19,7 @@ var createScene = function() {
 
     var hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
 
-    var hdrTexture = new BABYLON.CubeTexture.CreateFromPrefilteredData("img/testSpecularHDR.dds", scene);
+    var hdrTexture = new BABYLON.CubeTexture.CreateFromPrefilteredData("img/environment.env", scene);
     scene.environmentTexture = hdrTexture;
     
     var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,new BABYLON.Vector3.Zero(), scene);
