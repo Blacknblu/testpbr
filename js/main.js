@@ -1,6 +1,7 @@
 var canvas;
 var engine;
 var scene;
+var isDown = true;
 
 document.addEventListener("DOMContentLoaded", startGame);
 
@@ -19,47 +20,77 @@ var createScene = function() {
 
     var hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
 
-    var hdrTexture = new BABYLON.CubeTexture.CreateFromPrefilteredData("img/environment.env", scene);
-    scene.environmentTexture = hdrTexture;
+    var CoT = new BABYLON.TransformNode("root");
+    CoT.position = new BABYLON.Vector3(0.8,0.8,-0.3);
+
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    var handButton = new BABYLON.GUI.Button.CreateImageOnlyButton("handButton", "img/handButton.png");
+    advancedTexture.addControl(handButton);
+    handButton.width = "60px";
+    handButton.height = "60px";
+    handButton.isPointerBlocker = true;
+    handButton.linkWithMesh(CoT);  
+    handButton.thickness = 0; 
+    // rect1.linkOffsetY = -200;
+    handButton.onPointerDownObservable.add(function() {
+        console.log(isDown);
+        if(isDown) {
+            scene.beginAnimation(scene.skeletons[0],1,30,false,1);
+            isDown=false;
+        }
+        else {
+            scene.beginAnimation(scene.skeletons[0],31,70,false,1);
+            isDown= true;
+        }
+    });
     
-    var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,new BABYLON.Vector3.Zero(), scene);
-    camera.setPosition(new BABYLON.Vector3(0,0,-5));
+    var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,new BABYLON.Vector3(0,0.2,0), scene);
+    camera.setPosition(new BABYLON.Vector3(0,2,-5));
+    camera.upperRadiusLimit = 10;
+    camera.lowerRadiusLimit = 2;
+    camera.useAutoRotationBehavior = true;
+    camera.autoRotationBehavior.idleRotationSpeed = 0.3;
+    camera.wheelPrecision = 100;
+    camera.pinchPrecision = 100;
     camera.attachControl(canvas, true);
 
-    var sphere = new BABYLON.Mesh.CreateSphere('mySphere', 16, 2, scene);
-    sphere.position = new BABYLON.Vector3(-2.5,0,0);
-    var pbr = new BABYLON.PBRMetallicRoughnessMaterial("pbr", scene);
-    sphere.material = pbr;
-    pbr.baseColor = new BABYLON.Color3.White();
-    pbr.metallic = 0.5;
-    pbr.roughness = 0.2;
-    pbr.alpha = 0.3;
-    
+    BABYLON.Animation.AllowMatricesInterpolation = true
 
-    var poly = new BABYLON.Mesh.CreatePolyhedron('myPoly',{type:3}, scene);
-    poly.position = new BABYLON.Vector3.Zero();
-    var polyMaterial = new BABYLON.StandardMaterial('polyMat',scene);
-    poly.material = polyMaterial;
+    var skydomeTask = assetsManager.addMeshTask("load_sky","", "models/skydome/", "skydome.babylon");
+    skydomeTask.onSuccess = function(task) {
+        var sky = task.loadedMeshes[0];
+        sky.position = new BABYLON.Vector3(0,0,0);
+        sky.scaling = new BABYLON.Vector3(100,100,100);
+        var skyMat = new BABYLON.StandardMaterial("skyMat", scene);
+        var skyTex = new BABYLON.Texture("models/skydome/skyDomeDiff.png",scene);
+        skyMat.disableLighting = true;
+        skyMat.backFaceCulling = false;
+        skyMat.emissiveTexture = skyTex;
+        sky.material = skyMat;
+    };
 
-
-    var meshTask = assetsManager.addMeshTask("load_main","", "models/", "export.babylon");
+    var meshTask = assetsManager.addMeshTask("load_main","", "models/press/", "press.babylon");
     meshTask.onSuccess = function (task) {
         var press = task.loadedMeshes[0];
-        press.position = new BABYLON.Vector3(2.5,0,0);
+        press.position = new BABYLON.Vector3(0,0,0);
         press.scaling = new BABYLON.Vector3(2.5,2.5,2.5);
+        press.name = 'press';
         var pressPbr = new BABYLON.PBRMaterial("pressPbr", scene);
-        var base = new BABYLON.Texture('models/1014339264_14339264_Base.png',scene);
-        var metallicRoughness = new BABYLON.Texture('models/metallicRoughness.png',scene);
-        var normal = new BABYLON.Texture('models/1014339264_14339264_Normal.png',scene);
+        var base = new BABYLON.Texture('models/press/1014339264_14339264_Base.png',scene);
+        var metallicRoughness = new BABYLON.Texture('models/press/metallicRoughness.png',scene);
+        var normal = new BABYLON.Texture('models/press/1014339264_14339264_Normal.png',scene);
         pressPbr.albedoTexture = base;
         pressPbr.metallicTexture = metallicRoughness;
         pressPbr.bumpTexture = normal;
         pressPbr.useRoughnessFromMetallicTextureAlpha = false;
         pressPbr.useRoughnessFromMetallicTextureGreen = true;
         pressPbr.useMetallnessFromMetallicTextureBlue = true;
+        var hdrTexture = new BABYLON.CubeTexture.CreateFromPrefilteredData("img/environment.env", scene);
+        pressPbr.reflectionTexture = hdrTexture;
         press.material = pressPbr;
-
-    }
+        console.log(press);
+    };
 
     assetsManager.onFinish = function () {
         engine.runRenderLoop(function () {
@@ -74,3 +105,5 @@ var createScene = function() {
 window.addEventListener('resize', function() {
     engine.resize();
 });
+
+
