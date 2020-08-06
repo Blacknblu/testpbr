@@ -1,7 +1,6 @@
 var canvas;
 var engine;
 var scene;
-var isDown = true;
 
 document.addEventListener("DOMContentLoaded", startGame);
 
@@ -15,6 +14,10 @@ var createScene = function() {
     var scene = new BABYLON.Scene(engine);
     var assetsManager = new BABYLON.AssetsManager(scene);
     BABYLON.Animation.AllowMatricesInterpolation = true;
+    var initialCameraPosition = new BABYLON.Vector3(0,2,-5);
+    var cameraTarget = new BABYLON.Vector3(0,0.2,0);
+    var animationCamera = new BABYLON.Animation("camAnimation", "position", 30, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);   
+    var isDown = true;
 
     var light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 6, 0), scene);
     light.intensity = 1;
@@ -26,36 +29,76 @@ var createScene = function() {
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    var handButton = new BABYLON.GUI.Button.CreateImageOnlyButton("handButton", "img/handButton.png");
-    advancedTexture.addControl(handButton);
-    handButton.width = "60px";
-    handButton.height = "60px";
-    handButton.isPointerBlocker = true;
-    handButton.linkWithMesh(CoT);  
-    handButton.thickness = 0;
-    handButton.onPointerDownObservable.add(function() {
-        console.log(isDown);
-        if(isDown) {
-            scene.beginAnimation(scene.skeletons[0],1,30,false,1);
-            isDown=false;
-        }
-        else {
-            scene.beginAnimation(scene.skeletons[0],31,70,false,1);
-            isDown= true;
-        }
+
+    var pressText = new BABYLON.GUI.Image("pressText","img/pressText.svg");
+    advancedTexture.addControl(pressText);
+    pressText.width= "500px";
+    pressText.height = "67px";
+    pressText.left = "20px";
+    pressText.top = "20px";
+    pressText.horizontalAlignment = BABYLON.GUI.Image.HORIZONTAL_ALIGNMENT_LEFT;
+    pressText.verticalAlignment = BABYLON.GUI.Image.VERTICAL_ALIGNMENT_TOP;
+
+    // var handButton = new BABYLON.GUI.Button.CreateImageOnlyButton("handButton", "img/handButton.png");
+    // advancedTexture.addControl(handButton);
+    // handButton.width = "90px";
+    // handButton.height = "90px";
+    // handButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    // handButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    // handButton.top = "20%";
+    // handButton.isPointerBlocker = true; 
+    // handButton.thickness = 0;
+    // handButton.onPointerDownObservable.add(function() {
+    //     console.log(isDown);
+    //     if(isDown) {
+    //         scene.beginAnimation(scene.skeletons[0],1,30,false,1);
+    //         isDown=false;
+    //     }
+    //     else {
+    //         scene.beginAnimation(scene.skeletons[0],31,70,false,1);
+    //         isDown= true;
+    //     }
+    // });
+
+    var resetButton = new BABYLON.GUI.Button.CreateImageOnlyButton('resetButton','img/resetButton.svg');
+    advancedTexture.addControl(resetButton);
+    resetButton.width = "100px";
+    resetButton.height = "100px";
+    resetButton.horizontalAlignment = BABYLON.GUI.Image.HORIZONTAL_ALIGNMENT_RIGHT;
+    resetButton.verticalAlignment = BABYLON.GUI.Image.VERTICAL_ALIGNMENT_BOTTOM;
+    resetButton.left= "-20px";
+    resetButton.top="-20px";
+    resetButton.thickness = 0;
+    resetButton.isPointerBlocker = true;
+    resetButton.onPointerDownObservable.add(function() {
+        resetCamera(scene.getCameraByName('myCamera').position);
     });
     
-    var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,new BABYLON.Vector3(0,0.2,0), scene);
-    camera.setPosition(new BABYLON.Vector3(0,2,-5));
+    var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,cameraTarget, scene);
+    camera.position=initialCameraPosition;
     camera.upperRadiusLimit = 10;
     camera.lowerRadiusLimit = 2;
     camera.useAutoRotationBehavior = true;
     camera.autoRotationBehavior.idleRotationSpeed = 0.3;
     camera.wheelPrecision = 100;
     camera.pinchPrecision = 100;
+    camera.panningSensibility = 0;
     camera.attachControl(canvas, true);
-
-    
+    var resetCamera = function(currPos) {
+        var keys = [];
+        keys.push({
+            frame: 0,
+            value: currPos
+        });
+        keys.push({
+            frame: 500,
+            value: initialCameraPosition
+        });
+        animationCamera.setKeys(keys);
+        camera.animations = [];
+        camera.animations.push(animationCamera);
+        scene.beginAnimation(camera,0,40,false, 1);
+    };
     
     var skydomeTask = assetsManager.addMeshTask("load_sky","", "models/skydome/", "skydome.babylon");
     skydomeTask.onSuccess = function(task) {
