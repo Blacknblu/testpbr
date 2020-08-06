@@ -27,10 +27,6 @@ Exporter version: 6.4.1, Blender version: 2.83.0
 		processing action Action:  in[1 - 70], out[0 - 70]
 	processing begun of mesh:  Press
 		processing begun of material:  Material
-			processing texture Normal_101433926414339264
-				texture type:  bumpTexture, mapped using: "UVMap"
-			processing texture Base_101433926414339264
-				texture type:  diffuseTexture, mapped using: "UVMap"
 		Custom split normals with tangents being used
 		num positions      :  33186
 		num normals        :  33186
@@ -50,4 +46,4 @@ Exporter version: 6.4.1, Blender version: 2.83.0
 	writing mesh:  Press
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 7.7366 secs
+elapsed time:  0 min, 7.862 secs

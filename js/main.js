@@ -14,6 +14,7 @@ function startGame() {
 var createScene = function() {
     var scene = new BABYLON.Scene(engine);
     var assetsManager = new BABYLON.AssetsManager(scene);
+    BABYLON.Animation.AllowMatricesInterpolation = true;
 
     var light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 6, 0), scene);
     light.intensity = 1;
@@ -31,8 +32,7 @@ var createScene = function() {
     handButton.height = "60px";
     handButton.isPointerBlocker = true;
     handButton.linkWithMesh(CoT);  
-    handButton.thickness = 0; 
-    // rect1.linkOffsetY = -200;
+    handButton.thickness = 0;
     handButton.onPointerDownObservable.add(function() {
         console.log(isDown);
         if(isDown) {
@@ -55,18 +55,17 @@ var createScene = function() {
     camera.pinchPrecision = 100;
     camera.attachControl(canvas, true);
 
-    BABYLON.Animation.AllowMatricesInterpolation = true
-
+    
+    
     var skydomeTask = assetsManager.addMeshTask("load_sky","", "models/skydome/", "skydome.babylon");
     skydomeTask.onSuccess = function(task) {
         var sky = task.loadedMeshes[0];
         sky.position = new BABYLON.Vector3(0,0,0);
         sky.scaling = new BABYLON.Vector3(100,100,100);
         var skyMat = new BABYLON.StandardMaterial("skyMat", scene);
-        var skyTex = new BABYLON.Texture("models/skydome/skyDomeDiff.jpg",scene);
         skyMat.disableLighting = true;
         skyMat.backFaceCulling = false;
-        skyMat.emissiveTexture = skyTex;
+        skyMat.emissiveTexture = new BABYLON.Texture("img/skydomeDiff.jpg",scene);
         sky.material = skyMat;
     };
 
@@ -77,9 +76,9 @@ var createScene = function() {
         press.scaling = new BABYLON.Vector3(2.5,2.5,2.5);
         press.name = 'press';
         var pressPbr = new BABYLON.PBRMaterial("pressPbr", scene);
-        var base = new BABYLON.Texture('models/press/1014339264_14339264_Base.png',scene);
-        var metallicRoughness = new BABYLON.Texture('models/press/metallicRoughness.png',scene);
-        var normal = new BABYLON.Texture('models/press/1014339264_14339264_Normal.png',scene);
+        var base = new BABYLON.Texture('img/base.png',scene);
+        var metallicRoughness = new BABYLON.Texture('img/metallicRoughness.png',scene);
+        var normal = new BABYLON.Texture('img/normal.png',scene);
         pressPbr.albedoTexture = base;
         pressPbr.metallicTexture = metallicRoughness;
         pressPbr.bumpTexture = normal;
@@ -89,7 +88,6 @@ var createScene = function() {
         var hdrTexture = new BABYLON.CubeTexture.CreateFromPrefilteredData("img/environment.env", scene);
         pressPbr.reflectionTexture = hdrTexture;
         press.material = pressPbr;
-        console.log(press);
     };
 
     assetsManager.onFinish = function () {
