@@ -12,19 +12,19 @@ Exporter version: 6.4.1, Blender version: 2.83.0
 		Texture directory   :  D:\Projects\Kenwood\models\
 	Python World class constructor completed
 	WARNING: No active camera has been assigned, or is not in a currently selected Blender layer
-	processing begun of mesh:  Press
-		processing begun of material:  1014339264_14339264
-		Custom split normals with tangents being used
-		num positions      :  33075
-		num normals        :  33075
-		num tangents       :  132300
-		num uvs            :  66150
+	processing begun of mesh:  Sphere.001
+		processing begun of material:  Material
+			processing texture skydomeDiff
+				texture type:  emissiveTexture, mapped using: "UVMap"
+		num positions      :  588
+		num normals        :  588
+		num tangents       :  0
+		num uvs            :  1176
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  36630
-		WARNING: # of 0 area faces found:  112
+		num triangles      :  960
 ========= Writing of JSON file started =========
-	writing mesh:  Press
+	writing mesh:  Sphere.001
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 4.4233 secs
+elapsed time:  0 min, 0.1985 secs
