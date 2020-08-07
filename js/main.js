@@ -24,30 +24,6 @@ var createScene = function() {
 
     var hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
 
-    var CoT = new BABYLON.TransformNode("root");
-    CoT.position = new BABYLON.Vector3(0.8,0.8,-0.3);
-
-    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-
-    var pressText = new BABYLON.GUI.Image("pressText","img/pressText.svg");
-    advancedTexture.addControl(pressText);
-    pressText.width= "500px";
-    pressText.height = "67px";
-    pressText.left = "20px";
-    pressText.top = "20px";
-    pressText.horizontalAlignment = BABYLON.GUI.Image.HORIZONTAL_ALIGNMENT_LEFT;
-    pressText.verticalAlignment = BABYLON.GUI.Image.VERTICAL_ALIGNMENT_TOP;
-
-    // var handButton = new BABYLON.GUI.Button.CreateImageOnlyButton("handButton", "img/handButton.png");
-    // advancedTexture.addControl(handButton);
-    // handButton.width = "90px";
-    // handButton.height = "90px";
-    // handButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    // handButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    // handButton.top = "20%";
-    // handButton.isPointerBlocker = true; 
-    // handButton.thickness = 0;
     // handButton.onPointerDownObservable.add(function() {
     //     console.log(isDown);
     //     if(isDown) {
@@ -60,19 +36,9 @@ var createScene = function() {
     //     }
     // });
 
-    var resetButton = new BABYLON.GUI.Button.CreateImageOnlyButton('resetButton','img/resetButton.svg');
-    advancedTexture.addControl(resetButton);
-    resetButton.width = "100px";
-    resetButton.height = "100px";
-    resetButton.horizontalAlignment = BABYLON.GUI.Image.HORIZONTAL_ALIGNMENT_RIGHT;
-    resetButton.verticalAlignment = BABYLON.GUI.Image.VERTICAL_ALIGNMENT_BOTTOM;
-    resetButton.left= "-20px";
-    resetButton.top="-20px";
-    resetButton.thickness = 0;
-    resetButton.isPointerBlocker = true;
-    resetButton.onPointerDownObservable.add(function() {
-        resetCamera(scene.getCameraByName('myCamera').position);
-    });
+    // resetButton.onPointerDownObservable.add(function() {
+    //     resetCamera(scene.getCameraByName('myCamera').position);
+    // });
     
     var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,cameraTarget, scene);
     camera.position=initialCameraPosition;
