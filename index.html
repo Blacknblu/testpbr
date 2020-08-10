@@ -12,17 +12,22 @@
     <title>Document</title>
 </head>
 <body>
-    <div class= "infront">
-        <div class="productName">
-            <img src="img/pressText.svg" id="productText">
-        </div>
-        <div class="controls">
-            <img src="img/handButton.svg" id="handButton" width="1024" height="1024">
-            <img src="img/resetButton.svg" id="resetButton" width="1024" height="1024">
+    <div class= "infront" id= "test">
+        <div class= "container">
+            <div class= "leftItems">
+                <img src="img/logo.svg" id="logo" alt="">
+                <img src="img/pressText.svg" id="productText">
+            </div>
+            <div class = "rightItems">
+                <img src="img/resetButton.svg" id="resetButton" alt="">
+                <img src="img/handButton.svg" id="handButton" alt="">
+            </div>
         </div>
     </div>
     <div class= "behind">
-        <canvas id="renderCanvas" width="800" height="600" class = 'behind'></canvas>
+        <canvas id="renderCanvas" width="800px" height="600px" class = 'behind'></canvas>
     </div>
 </body>
 </html>
+
+

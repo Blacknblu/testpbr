@@ -1,6 +1,8 @@
 var canvas;
 var engine;
 var scene;
+var callReset = false;
+var callAnimation = false;
 
 document.addEventListener("DOMContentLoaded", startGame);
 
@@ -24,21 +26,16 @@ var createScene = function() {
 
     var hemiLight = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
 
-    // handButton.onPointerDownObservable.add(function() {
-    //     console.log(isDown);
-    //     if(isDown) {
-    //         scene.beginAnimation(scene.skeletons[0],1,30,false,1);
-    //         isDown=false;
-    //     }
-    //     else {
-    //         scene.beginAnimation(scene.skeletons[0],31,70,false,1);
-    //         isDown= true;
-    //     }
-    // });
-
-    // resetButton.onPointerDownObservable.add(function() {
-    //     resetCamera(scene.getCameraByName('myCamera').position);
-    // });
+    var animate = function() {
+        if(isDown) {
+            scene.beginAnimation(scene.skeletons[0],1,30,false,1);
+            isDown=false;
+        }
+        else {
+            scene.beginAnimation(scene.skeletons[0],31,70,false,1);
+            isDown= true;
+        }
+    }
     
     var camera = new BABYLON.ArcRotateCamera('myCamera',0,0,5,cameraTarget, scene);
     camera.position=initialCameraPosition;
@@ -74,7 +71,7 @@ var createScene = function() {
         var skyMat = new BABYLON.StandardMaterial("skyMat", scene);
         skyMat.disableLighting = true;
         skyMat.backFaceCulling = false;
-        skyMat.emissiveTexture = new BABYLON.Texture("img/skydomeDiff.jpg",scene);
+        skyMat.emissiveTexture = new BABYLON.Texture("img/skydomeDiff.png",scene);
         sky.material = skyMat;
     };
 
@@ -101,6 +98,14 @@ var createScene = function() {
 
     assetsManager.onFinish = function () {
         engine.runRenderLoop(function () {
+            if(callReset) {
+                resetCamera(scene.getCameraByName('myCamera').position);
+                callReset = false;
+            }
+            if(callAnimation){
+                animate();
+                callAnimation = false;
+            }
             scene.render();
         });   
     };
@@ -112,5 +117,17 @@ var createScene = function() {
 window.addEventListener('resize', function() {
     engine.resize();
 });
+
+window.addEventListener('load', function() {
+    document.getElementById('resetButton').onmousedown = (evt) => {
+        evt.preventDefault();
+        callReset = true;
+    }
+    document.getElementById('handButton').onmousedown = (evt) => {
+        evt.preventDefault();
+        callAnimation = true;
+    }
+    
+})
 
 

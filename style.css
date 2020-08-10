@@ -14,48 +14,61 @@ html, body, #renderCanvas {
     height:100%;
     display: flex;
     flex-wrap: nowrap;
-    flex-direction: column;
+    flex-direction: column-reverse;
     pointer-events: none;
 }
 
-.productName {
+.container {
     width: 100%;
-    height:50%;
-}
-
-#productText {
-    margin: 2%;
-    width: 60%;
-}
-
-.controls {
-    width: 100%;
-    height:50%;
+    height: 15%;
+    background-color: rgba(255, 26, 11, 1.00);
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
+    pointer-events: none;
     justify-content: space-between;
-    align-items: flex-end;
+}
+.leftItems {
+    height: 100%;
+    width: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    pointer-events: none;
+    align-items: center;
+}
+#logo {
+    height: 100%;
+    width: auto;
+    padding-right: 2%;
 }
 
 
+#productText {
+    height: 50%;
+    width: auto;
+}
+.rightItems {
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row-reverse;
+    pointer-events: none;
+    align-items: center;
+}
 #handButton {
-    width: 20%;
-    max-width: 400px;
-    height: auto;
-    margin-bottom:3%;
-    margin-right: 1.5%;
-    margin-left: 3%;
+    height: 50%;
+    width: auto;
+    pointer-events: all;
+}
+#resetButton {
+    height: 50%;
+    width: auto;
+    margin-right: 20%;
+    margin-left: 20%;
+    pointer-events: all;
 }
 
-#resetButton {
-    width: 20%;
-    max-width: 400px;
-    height: auto;
-    margin-bottom: 3%;
-    margin-left: 1.5%;
-    margin-right: 3%;
-}
 
 .behind {
     z-index: 1;
@@ -69,3 +82,42 @@ canvas {
     width: 100%;
     height: 100%;
 }
+
+    /* .productName {
+    width: 100%;
+    height:50%;
+    }
+
+    #productText {
+    margin: 2%;
+    width: 60%;
+    }
+
+    .controls {
+    width: 100%;
+    height:50%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    }
+
+
+    #handButton {
+    width: 10%;
+    height: auto;
+    margin-bottom:3%;
+    margin-right: 1.5%;
+    margin-left: 3%;
+    pointer-events: all;
+    }
+
+    #resetButton {
+    width: 10%;
+    height: auto;
+    margin-bottom: 3%;
+    margin-left: 1.5%;
+    margin-right: 3%;
+    pointer-events: all;
+    } */
